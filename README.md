@@ -3,8 +3,8 @@ Hashed Factorization Machine with Follow The Regularized Leader for Kaggle Avazu
 
 Run fast with pypy:
 
-pypy runmodel_example.py
+    pypy runmodel_example.py
 
 or run slow with regular python:
 
-python runmodel_example.py
+    python runmodel_example.py
