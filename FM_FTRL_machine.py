@@ -1,3 +1,6 @@
+''' Based on Tinrtgu's FTRL code: http://www.kaggle.com/c/avazu-ctr-prediction/forums/t/10927/beat-the-benchmark-with-less-than-1mb-of-memory
+'''
+
 from csv import DictReader
 from math import exp, copysign, log, sqrt
 from datetime import datetime
