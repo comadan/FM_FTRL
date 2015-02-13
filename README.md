@@ -13,9 +13,6 @@ Features:
 - L1 and L2 regularization
 - dropout regularization option
 
-Should probably have:
-- separate learning rates for first-order and second-order (interaction) features.
-
 
 Run fast with pypy:
 

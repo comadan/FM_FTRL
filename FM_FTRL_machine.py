@@ -8,13 +8,15 @@ import random
 
 class FM_FTRL_machine(object):
     
-    def __init__(self, fm_dim, fm_initDev, L1, L2, L1_fm, L2_fm, D, alpha, beta, dropoutRate = 1.0):
+    def __init__(self, fm_dim, fm_initDev, L1, L2, L1_fm, L2_fm, D, alpha, beta, alpha_fm = .1, beta_fm = 1.0, dropoutRate = 1.0):
         ''' initialize the factorization machine.'''
         
         self.alpha = alpha              # learning rate parameter alpha
         self.beta = beta                # learning rate parameter beta
         self.L1 = L1                    # L1 regularizer for first order terms
         self.L2 = L2                    # L2 regularizer for first order terms
+        self.alpha_fm = alpha_fm        # learning rate parameter alpha for factorization machine
+        self.beta_fm = beta_fm          # learning rate parameter beta for factorization machine
         self.L1_fm = L1_fm              # L1 regularizer for factorization machine weights. Only use L1 after one epoch of training, because small initializations are needed for gradient.
         self.L2_fm = L2_fm              # L2 regularizer for factorization machine weights.
         self.fm_dim = fm_dim            # dimension of factorization.
@@ -56,6 +58,8 @@ class FM_FTRL_machine(object):
         beta = self.beta
         L1 = self.L1
         L2 = self.L2
+        alpha_fm = self.alpha_fm
+        beta_fm = self.beta_fm
         L1_fm = self.L1_fm
         L2_fm = self.L2_fm
         
@@ -99,7 +103,7 @@ class FM_FTRL_machine(object):
                 if sign * z_fm[i][k] <= L1_fm:
                     w_fm[i][k] = 0.
                 else:
-                    w_fm[i][k] = (sign * L1_fm - z_fm[i][k]) / ((beta + sqrt(n_fm[i][k])) / alpha + L2_fm)
+                    w_fm[i][k] = (sign * L1_fm - z_fm[i][k]) / ((beta_fm + sqrt(n_fm[i][k])) / alpha_fm + L2_fm)
         
         for i in range(len_x):
             for j in range(i + 1, len_x):
@@ -135,6 +139,7 @@ class FM_FTRL_machine(object):
         ''' Update the parameters using FTRL (Follow the Regularized Leader)
         '''
         alpha = self.alpha
+        alpha_fm = self.alpha_fm
         
         # model
         n = self.n
@@ -171,7 +176,7 @@ class FM_FTRL_machine(object):
         for i in x:
             for k in range(self.fm_dim):
                 g_fm = g * fm_sum[i][k]
-                sigma = (sqrt(n_fm[i][k] + g_fm * g_fm) - sqrt(n_fm[i][k])) / alpha
+                sigma = (sqrt(n_fm[i][k] + g_fm * g_fm) - sqrt(n_fm[i][k])) / alpha_fm
                 z_fm[i][k] += g_fm - sigma * w_fm[i][k]
                 n_fm[i][k] += g_fm * g_fm
     
