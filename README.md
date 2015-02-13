@@ -3,6 +3,20 @@ Hashed Factorization Machine with Follow The Regularized Leader online learning 
 
 Based on Tinrtgu's code at: http://www.kaggle.com/c/avazu-ctr-prediction/forums/t/10927/beat-the-benchmark-with-less-than-1mb-of-memory
 
+
+
+Features:
+- online learning
+- feature hashing to limit memory footprint
+- Follow the Regularized Leader (FTRL) optimization: http://research.google.com/pubs/pub41159.html
+- Factorization Machine (low rank matrix factorization)
+- L1 and L2 regularization
+- dropout regularization option
+
+Should probably have:
+- separate learning rates for first-order and second-order (interaction) features.
+
+
 Run fast with pypy:
 
     pypy runmodel_example.py
