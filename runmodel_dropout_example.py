@@ -28,6 +28,8 @@ L2 = .1
 L1_fm = 2.0
 L2_fm = 1.0
 
+dropoutRate = .5
+
 n_epochs = 5
 
 
@@ -35,7 +37,7 @@ n_epochs = 5
 start = datetime.now()
 
 # initialize a FM learner
-learner = FM_FTRL_machine(fm_dim, fm_initDev, L1, L2, L1_fm, L2_fm, D, alpha, beta)
+learner = FM_FTRL_machine(fm_dim, fm_initDev, L1, L2, L1_fm, L2_fm, D, alpha, beta, dropoutRate)
 
 print("Start Training:")
 for e in range(n_epochs):
@@ -54,12 +56,12 @@ for e in range(n_epochs):
     progressiveCount = 0.
     for t, date, ID, x, y in data(trainingFile, D, hashSalt):
         if date == 30:
-            p = learner.predict(x)
+            p = learner.predictWithDroppedOutModel(x)
             loss = logLoss(p, y)
             cvLoss += loss
             cvCount += 1.
         else:
-            p = learner.predict(x)
+            p = learner.dropoutThenPredict(x)
             loss = logLoss(p, y)
             learner.update(x, p, y)
             

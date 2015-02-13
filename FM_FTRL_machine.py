@@ -8,7 +8,7 @@ import random
 
 class FM_FTRL_machine(object):
     
-    def __init__(self, fm_dim, fm_initDev, L1, L2, L1_fm, L2_fm, D, alpha, beta):
+    def __init__(self, fm_dim, fm_initDev, L1, L2, L1_fm, L2_fm, D, alpha, beta, dropoutRate = 1.0):
         ''' initialize the factorization machine.'''
         
         self.alpha = alpha              # learning rate parameter alpha
@@ -19,6 +19,7 @@ class FM_FTRL_machine(object):
         self.L2_fm = L2_fm              # L2 regularizer for factorization machine weights.
         self.fm_dim = fm_dim            # dimension of factorization.
         self.fm_initDev = fm_initDev    # standard deviation for random intitialization of factorization weights.
+        self.dropoutRate = dropoutRate  # dropout rate (which is actually the inclusion rate), i.e. dropoutRate = .8 indicates a probability of .2 of dropping out a feature.
         
         self.D = D
         
@@ -47,7 +48,6 @@ class FM_FTRL_machine(object):
             
             for k in range(self.fm_dim): 
                 self.z_fm[i][k] = random.gauss(0., self.fm_initDev)
-            
     
     def predict_raw(self, x):
         ''' predict the raw score prior to logit transformation.
@@ -112,6 +112,24 @@ class FM_FTRL_machine(object):
         ''' predict the logit
         '''
         return 1. / (1. + exp(- max(min(self.predict_raw(x), 35.), -35.)))
+    
+    def dropout(self, x):
+        ''' dropout variables in list x
+        '''
+        for i, var in enumerate(x):
+            if random.random() > self.dropoutRate:
+                del x[i]
+    
+    def dropoutThenPredict(self, x):
+        ''' first dropout some variables and then predict the logit using the dropped out data.
+        '''
+        self.dropout(x)
+        return self.predict(x)
+    
+    def predictWithDroppedOutModel(self, x):
+        ''' predict using all data, using a model trained with dropout.
+        '''
+        return 1. / (1. + exp(- max(min(self.predict_raw(x) * self.dropoutRate, 35.), -35.)))
     
     def update(self, x, p, y):
         ''' Update the parameters using FTRL (Follow the Regularized Leader)
