@@ -20,13 +20,16 @@ hashSalt = "salty"
 alpha = .1
 beta = 1.
 
+alpha_fm = .01
+beta_fm = 1.
+
 p_D = 22
 D = 2 ** p_D
 
 L1 = 1.0
 L2 = .1
 L1_fm = 2.0
-L2_fm = 1.0
+L2_fm = 3.0
 
 n_epochs = 5
 
@@ -35,7 +38,7 @@ n_epochs = 5
 start = datetime.now()
 
 # initialize a FM learner
-learner = FM_FTRL_machine(fm_dim, fm_initDev, L1, L2, L1_fm, L2_fm, D, alpha, beta)
+learner = FM_FTRL_machine(fm_dim, fm_initDev, L1, L2, L1_fm, L2_fm, D, alpha, beta, alpha_fm = alpha_fm, beta_fm = beta_fm)
 
 print("Start Training:")
 for e in range(n_epochs):

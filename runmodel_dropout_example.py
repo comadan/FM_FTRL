@@ -19,6 +19,7 @@ hashSalt = "salty"
     
 alpha = .1
 beta = 1.
+
 alpha_fm = .05
 beta_fm = 1.
 
@@ -30,7 +31,7 @@ L2 = .1
 L1_fm = 2.0
 L2_fm = 1.0
 
-dropoutRate = .5
+dropoutRate = .8
 
 n_epochs = 5
 
